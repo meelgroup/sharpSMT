@@ -4,7 +4,7 @@ set -e
 
 usage () {
 cat <<EOF
-usage: $0 [<option> ...] <smt2 filename>
+usage: $0 -s <smtsolver> -c <modelcounter> <smt2 filename>
 where <option> is one of the following:
   -h, --help        print this message and exit
   -s <solver>       use SMT solver <solver> for bitblasting {stp,boolector}
