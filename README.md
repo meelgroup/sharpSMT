@@ -1,6 +1,6 @@
 # sharpSMT
 
-`[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)`
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 Framework to Count SMT formulas
 
@@ -20,4 +20,3 @@ Make individual systems in folders `modelcounters`, `smtsolvers` and `smtcounter
 ```
 
 Issue `./sharpsmt.sh -h` to know possible options for `<smtsolver>` and `<modelcounter>`.
-
