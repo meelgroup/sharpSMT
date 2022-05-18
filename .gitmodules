@@ -1,0 +1,21 @@
+[submodule "smtcounters/smtapproxmc"]
+	path = smtcounters/smtapproxmc
+	url = https://bitbucket.org/kuldeepmeel/smtapproxmc.git
+[submodule "smtsolvers/boolector"]
+	path = smtsolvers/boolector
+	url = git@github.com:Boolector/boolector.git
+[submodule "smtsolvers/stp"]
+	path = smtsolvers/stp
+	url = git@github.com:stp/stp.git
+[submodule "modelcounters/approxmc"]
+	path = modelcounters/approxmc
+	url = git@github.com:meelgroup/approxmc.git
+[submodule "modelcounters/ADDMC"]
+	path = modelcounters/ADDMC
+	url = git@github.com:vardigroup/ADDMC.git
+[submodule "modelcounters/sharpsat-td"]
+	path = modelcounters/sharpsat-td
+	url = git@github.com:Laakeri/sharpsat-td.git
+[submodule "modelcounters/ganak"]
+	path = modelcounters/ganak
+	url = git@github.com:meelgroup/ganak.git
