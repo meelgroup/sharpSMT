@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 usage () {
 cat <<EOF
 usage: $0 [<option> ...] <smt2 filename>
@@ -28,10 +30,6 @@ do
   case $opt in
     -h|--help) usage;;
 
-    -f*|-m*) if [ -z "$flags" ]; then flags=$1; else flags="$flags;$1"; fi;;
-
-    --ninja) ninja=yes;;
-
     -s)
       shift
       [ $# -eq 0 ] && die "missing argument to $opt"
@@ -50,5 +48,39 @@ do
 done
 
 file=$opt
+cnffilename=${file%.smt2}.cnf
 
 echo "count $file with $counter bitblasting with $solver"
+
+case $solver in
+  stp)
+    ./smtsolvers/stp/build/stp --disable-simplifications --disable-opt-inc --disable-cbitp --disable-equality --output-CNF ${file}
+    mv output_0.cnf ${cnffilename}
+    ;;
+
+  boolector)
+    ./smtsolvers/boolector/build/bin/boolector -dd ${file} > ${cnffilename}
+    ;;
+
+  *) die "invalid smtsolver name '$solver' (try 'sharpsmt.sh -h')";;
+esac
+
+case $counter in
+  approxmc)
+    ./modelcounters/approxmc/build/approxmc ${cnffilename}
+    ;;
+
+  sharpsat-td)
+    ./modelcounters/sharpsat-td/bin/sharpSAT -decot 1 -decow 100 -tmpdir . -cs 3500 ${cnffilename}
+    ;;
+
+  ganak)
+    ./modelcounters/ganak/build/ganak ${cnffilename}
+    ;;
+
+  addmc)
+    ./modelcounters/ADDMC/build/addmc --wf 1 --vl 1 --cf ${cnffilename}
+    ;;
+
+  *) die "invalid model counter name '$counter' (try 'sharpsmt.sh -h')";;
+esac
