@@ -8,7 +8,7 @@ Framework to Count SMT formulas
 
 ```shell
 git clone git@github.com:meelgroup/sharpSMT.git
-git submodule update
+git submodule update --init
 ```
 
 Make individual systems in folders `modelcounters`, `smtsolvers` and `smtcounters`.
