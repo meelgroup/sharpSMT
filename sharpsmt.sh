@@ -41,46 +41,67 @@ do
       [ $# -eq 0 ] && die "missing argument to $opt"
       counter=$1
       ;;
-
+    -m)
+      shift
+      [ $# -eq 0 ] && die "missing argument to $opt"
+      smtcounter=$1
+      ;;
     -*) die "invalid option '$opt' (try '-h')";;
   esac
   shift
 done
 
 file=$opt
-cnffilename=${file%.smt2}.cnf
 
-echo "count $file with $counter bitblasting with $solver"
+if [ -n $smtcounter ]; then
+  echo "count $file with $smtcounter"
 
-case $solver in
-  stp)
-    ./smtsolvers/stp/build/stp --disable-simplifications --disable-opt-inc --disable-cbitp --disable-equality --output-CNF ${file}
-    mv output_0.cnf ${cnffilename}
-    ;;
+  case $smtcounter in
+    smtapproxmc)
+      cp $file  smtcounters/smtapproxmc/scripts/
+      cd smtcounters/smtapproxmc/scripts/
+      python3 approxMC.py $file ./primes.txt 100 log.txt out.txt
+      cat log.txt
+      cat out.txt
+      rm log.txt out.txt $file
+      ;;
+    *) die "invalid smtcounter name '$smtcounter' (try 'sharpsmt.sh -h')";;
+  esac
+else
+  cnffilename=${file%.smt2}.cnf
 
-  boolector)
-    ./smtsolvers/boolector/build/bin/boolector -dd ${file} > ${cnffilename}
-    ;;
+  echo "count $file with $counter bitblasting with $solver"
 
-  *) die "invalid smtsolver name '$solver' (try 'sharpsmt.sh -h')";;
-esac
+  case $solver in
+    stp)
+      ./smtsolvers/stp/build/stp --disable-simplifications --disable-opt-inc --disable-cbitp --disable-equality --output-CNF ${file}
+      mv output_0.cnf ${cnffilename}
+      ;;
 
-case $counter in
-  approxmc)
-    ./modelcounters/approxmc/build/approxmc ${cnffilename}
-    ;;
+    boolector)
+      ./smtsolvers/boolector/build/bin/boolector -dd ${file} > ${cnffilename}
+      ;;
 
-  sharpsat-td)
-    ./modelcounters/sharpsat-td/bin/sharpSAT -decot 1 -decow 100 -tmpdir . -cs 3500 ${cnffilename}
-    ;;
+    *) die "invalid smtsolver name '$solver' (try 'sharpsmt.sh -h')";;
+  esac
 
-  ganak)
-    ./modelcounters/ganak/build/ganak ${cnffilename}
-    ;;
+  case $counter in
+    approxmc)
+      ./modelcounters/approxmc/build/approxmc ${cnffilename}
+      ;;
 
-  addmc)
-    ./modelcounters/ADDMC/build/addmc --wf 1 --vl 1 --cf ${cnffilename}
-    ;;
+    sharpsat-td)
+      ./modelcounters/sharpsat-td/bin/sharpSAT -decot 1 -decow 100 -tmpdir . -cs 3500 ${cnffilename}
+      ;;
 
-  *) die "invalid model counter name '$counter' (try 'sharpsmt.sh -h')";;
-esac
+    ganak)
+      ./modelcounters/ganak/build/ganak ${cnffilename}
+      ;;
+
+    addmc)
+      ./modelcounters/ADDMC/build/addmc --wf 1 --vl 1 --cf ${cnffilename}
+      ;;
+
+    *) die "invalid model counter name '$counter' (try 'sharpsmt.sh -h')";;
+  esac
+fi

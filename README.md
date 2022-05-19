@@ -8,7 +8,7 @@ Framework to Count SMT formulas
 
 ```shell
 git clone git@github.com:meelgroup/sharpSMT.git
-git submodule update
+git submodule update --init
 ```
 
 Make individual systems in folders `modelcounters`, `smtsolvers` and `smtcounters`.
@@ -19,4 +19,12 @@ Make individual systems in folders `modelcounters`, `smtsolvers` and `smtcounter
 ./sharpsmt.sh -s <smtsolver> -c <modelcounter> <smt2 filename>
 ```
 
-Issue `./sharpsmt.sh -h` to know possible options for `<smtsolver>` and `<modelcounter>`.
+Or,
+
+```shell
+./sharpsmt.sh -m <smtcounter> <smt2 filename>
+```
+
+
+
+Issue `./sharpsmt.sh -h` to know possible options for `<smtsolver>` , `<modelcounter>`, .
